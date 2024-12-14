@@ -1,0 +1,13 @@
+# rules.yml
+groups:
+  - name: app-rule
+    rules:
+      - alert: Real-Time Rate Updates Stopped
+        for: 10s
+        expr: increase(rate_count_total[1m]) < 5
+        labels:
+          severity: critical
+        annotations:
+          title: Real-Time Rate Updates Stopped
+          description: Real-Time Rate Updates Stopped
+

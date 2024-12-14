@@ -1,0 +1,23 @@
+route:
+  receiver: default
+  routes:
+    - matchers:
+        - severity="critical"
+      receiver: slack
+receivers:
+  - name: slack
+    slack_configs:
+      - channel: "#it"
+        send_resolved: true
+        api_url: "slack_url"
+        title: Alert
+        text: >-
+          {{ range .Alerts -}} 
+          *Alert:* {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+          *Description:* {{ .Annotations.description }}
+          *Details:*
+            {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+            {{ end }}
+          <@U031H6S9X5K>
+          {{ end }}
+  - name: default

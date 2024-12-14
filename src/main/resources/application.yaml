@@ -1,0 +1,17 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    info:
+      enabled: true
+    health:
+      show-details: always
+  health:
+    probes:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true

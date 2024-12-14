@@ -1,0 +1,34 @@
+version: "3.3"
+services:
+  redis:
+    image: redis:latest
+    command: redis-server --requirepass pass123
+    ports:
+      - 6379:6379
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+    ports:
+      - 9090:9090
+  alertmanager:
+    image: prom/alertmanager:v0.25.0
+    ports:
+      - 9093:9093
+    volumes:
+      - type: bind
+        source: ./alertmanager/alertmanager.yml
+        target: /etc/alertmanager/config.yml
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+  demo-alert:
+    image: demo-alert-4.0
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - prometheus
+      - alertmanager
